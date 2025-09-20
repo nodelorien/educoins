@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FinTech Edu - Plataforma MVP</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8fafc;
+      }
+      .brand-logo {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e0e7ef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #3b3b3b;
+        font-size: 1.1rem;
+      }
+      .card-login {
+        max-width: 370px;
+        margin: 5vh auto;
+      }
+      .dashboard-card {
+        min-width: 160px;
+        min-height: 120px;
+        cursor: pointer;
+        transition: box-shadow 0.2s;
+      }
+      .dashboard-card:hover {
+        box-shadow: 0 0 0 2px #0d6efd33;
+      }
+      .topic-card {
+        min-width: 160px;
+        min-height: 100px;
+        cursor: pointer;
+      }
+      .topic-card:hover {
+        box-shadow: 0 0 0 2px #0d6efd33;
+      }
+      .feedback {
+        font-size: 0.98rem;
+        margin-top: 0.5rem;
+      }
+      .leaderboard-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #e0e7ef;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #3b3b3b;
+        font-size: 1rem;
+      }
+      .qr-section {
+        text-align: center;
+      }
+      .qr-canvas {
+        margin: 0 auto 1rem auto;
+        display: block;
+      }
+      .stat-bar {
+        background: #e9ecef;
+        border-radius: 6px;
+        overflow: hidden;
+        height: 18px;
+      }
+      .stat-bar-inner {
+        background: #0d6efd;
+        height: 100%;
+        transition: width 0.5s;
+      }
+      @media (max-width: 600px) {
+        .dashboard-card,
+        .topic-card {
+          min-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav
+      id="navbar"
+      class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 d-none"
+      aria-label="Barra de navegación principal"
+    >
+      <a class="navbar-brand d-flex align-items-center" href="#" tabindex="0">
+        <img
+          src="logo.png"
+          alt="Logo FinTech Edu"
+          class="brand-logo me-2"
+          onerror="this.style.display='none'"
+        />
+        <span class="fw-bold">EduCoins</span>
+      </a>
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <span id="navbar-username" class="fw-semibold"></span>
+        <span
+          id="navbar-avatar"
+          class="avatar"
+          aria-label="Avatar usuario"
+        ></span>
+        <a
+          id="logoutBtn"
+          href="./login.html"
+          class="btn btn-outline-secondary btn-sm ms-2"
+          aria-label="Cerrar sesión"
+        >
+          <i class="bi bi-box-arrow-right"></i>
+          <span class="d-none d-md-inline">Cerrar sesión</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main container -->
+    <main id="main" class="container py-4" tabindex="-1"></main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- QRCode.js (inline minified) -->
+    <script>
+      // QRCode.js v1.0.0 (min)
+      /*! qrcodejs - https://github.com/davidshimjs/qrcodejs */
+      // ... QRCode.js minified code here ...
+    </script>
+    <script>
+      // --- Datos de ejemplo y utilidades ---
+      const DEMO_USERS = [
+        {
+          id: "u1",
+          name: "Ingrid Student",
+          email: "ingrid@student.com",
+          role: "Estudiante",
+          points: 0,
+          solved: 0,
+          avatar: "",
+          isCurrent: true,
+        },
+        {
+          id: "u2",
+          name: "Carlos Torres",
+          email: "carlos@fake.com",
+          role: "Estudiante",
+          points: 120,
+          solved: 7,
+          avatar: "",
+          isCurrent: false,
+        },
+        {
+          id: "u3",
+          name: "María López",
+          email: "maria@fake.com",
+          role: "Estudiante",
+          points: 95,
+          solved: 6,
+          avatar: "",
+          isCurrent: false,
+        },
+        {
+          id: "u4",
+          name: "Sofía Ramírez",
+          email: "sofia@fake.com",
+          role: "Estudiante",
+          points: 80,
+          solved: 5,
+          avatar: "",
+          isCurrent: false,
+        },
+        {
+          id: "u5",
+          name: "Juan Pérez",
+          email: "juan@fake.com",
+          role: "Estudiante",
+          points: 60,
+          solved: 4,
+          avatar: "",
+          isCurrent: false,
+        },
+        {
+          id: "u6",
+          name: "Ana Gómez",
+          email: "ana@fake.com",
+          role: "Estudiante",
+          points: 40,
+          solved: 3,
+          avatar: "",
+          isCurrent: false,
+        },
+        {
+          id: "u7",
+          name: "Prof. Diego Docente",
+          email: "diego@fake.com",
+          role: "Docente",
+          points: 0,
+          solved: 0,
+          avatar: "",
+          isCurrent: false,
+        },
+      ];
+      const GRADES = [6, 7, 8, 9, 10, 11];
+      const TOPICS = [
+        { id: "ingresos", name: "Ingresos", icon: "bi-cash-coin" },
+        { id: "gastos", name: "Gastos", icon: "bi-cart4" },
+        { id: "ahorro", name: "Ahorro", icon: "bi-piggy-bank" },
+        { id: "inversion", name: "Inversión", icon: "bi-graph-up-arrow" },
+      ];
+      // Generador de ejercicios para todos los grados y categorías
+      const EXERCISES = {};
+      const baseQuestions = {
+        ingresos: [
+          {
+            q: "¿Cuál de los siguientes es un ingreso?",
+            options: ["Comprar un libro", "Recibir salario", "Pagar impuestos"],
+            answer: 1,
+            type: "mc",
+            explanation:
+              "Recibir salario es un ingreso porque aumenta tu dinero.",
+          },
+          {
+            q: "Si ganas $200 y gastas $50, ¿cuánto te queda?",
+            answer: 150,
+            type: "num",
+            explanation:
+              "200 - 50 = 150. El ingreso menos el gasto es el saldo.",
+          },
+          {
+            q: "¿Qué es un ingreso pasivo?",
+            options: ["Salario", "Renta de propiedad", "Comprar ropa"],
+            answer: 1,
+            type: "mc",
+            explanation: "La renta de propiedad es ingreso pasivo.",
+          },
+          {
+            q: "Si recibes $300 y pagas $120, ¿cuánto ahorras?",
+            answer: 180,
+            type: "num",
+            explanation: "300 - 120 = 180.",
+          },
+          {
+            q: "¿Cuál de estos NO es ingreso?",
+            options: ["Herencia", "Pago de impuestos", "Venta de producto"],
+            answer: 1,
+            type: "mc",
+            explanation: "Pagar impuestos no es ingreso, es un gasto.",
+          },
+        ],
+        gastos: [
+          {
+            q: "¿Qué es un gasto necesario?",
+            options: ["Comprar dulces", "Pagar alquiler", "Ir al cine"],
+            answer: 1,
+            type: "mc",
+            explanation: "Pagar alquiler es un gasto necesario para vivir.",
+          },
+          {
+            q: "Si tienes $100 y gastas $30 en comida, ¿cuánto te queda?",
+            answer: 70,
+            type: "num",
+            explanation: "100 - 30 = 70.",
+          },
+          {
+            q: "¿Qué es un gasto fijo?",
+            options: [
+              "Pago de arriendo",
+              "Salir a comer",
+              "Comprar videojuegos",
+            ],
+            answer: 0,
+            type: "mc",
+            explanation: "El arriendo es un gasto fijo mensual.",
+          },
+          {
+            q: "Si tienes $200 y gastas $80, ¿cuánto te queda?",
+            answer: 120,
+            type: "num",
+            explanation: "200 - 80 = 120.",
+          },
+          {
+            q: "¿Cuál de estos es un gasto variable?",
+            options: ["Pago de arriendo", "Compra de ropa", "Seguro médico"],
+            answer: 1,
+            type: "mc",
+            explanation: "La compra de ropa varía cada mes.",
+          },
+        ],
+        ahorro: [
+          {
+            q: "¿Por qué es importante ahorrar?",
+            options: [
+              "Para gastar más",
+              "Para emergencias",
+              "Para perder dinero",
+            ],
+            answer: 1,
+            type: "mc",
+            explanation:
+              "Ahorrar permite enfrentar imprevistos y cumplir metas.",
+          },
+          {
+            q: "Si ahorras $20 cada mes, ¿cuánto tendrás en 5 meses?",
+            answer: 100,
+            type: "num",
+            explanation: "20 x 5 = 100.",
+          },
+          {
+            q: "¿Qué es un fondo de emergencia?",
+            options: [
+              "Dinero para emergencias",
+              "Dinero para fiestas",
+              "Dinero para ropa",
+            ],
+            answer: 0,
+            type: "mc",
+            explanation: "Un fondo de emergencia es para imprevistos.",
+          },
+          {
+            q: "Si ahorras $50 cada mes por 6 meses, ¿cuánto tienes?",
+            answer: 300,
+            type: "num",
+            explanation: "50 x 6 = 300.",
+          },
+          {
+            q: "¿Cuál es la mejor forma de ahorrar?",
+            options: ["Guardar en casa", "Depositar en banco", "Gastar todo"],
+            answer: 1,
+            type: "mc",
+            explanation: "El banco es más seguro y puede generar intereses.",
+          },
+        ],
+        inversion: [
+          {
+            q: "¿Qué es invertir?",
+            options: [
+              "Gastar dinero",
+              "Guardar bajo el colchón",
+              "Poner dinero para obtener más",
+            ],
+            answer: 2,
+            type: "mc",
+            explanation: "Invertir es usar dinero para generar más dinero.",
+          },
+          {
+            q: "Si inviertes $50 y ganas un 10%, ¿cuánto tienes?",
+            answer: 55,
+            type: "num",
+            explanation: "50 + 10% de 50 = 55.",
+          },
+          {
+            q: "¿Qué es diversificar una inversión?",
+            options: [
+              "Poner todo en un activo",
+              "Invertir en varios activos",
+              "No invertir",
+            ],
+            answer: 1,
+            type: "mc",
+            explanation:
+              "Diversificar es invertir en varios activos para reducir riesgo.",
+          },
+          {
+            q: "Si inviertes $100 y ganas 20%, ¿cuánto tienes?",
+            answer: 120,
+            type: "num",
+            explanation: "100 + 20% de 100 = 120.",
+          },
+          {
+            q: "¿Cuál de estos es un ejemplo de inversión?",
+            options: [
+              "Comprar un celular",
+              "Comprar acciones",
+              "Gastar en comida",
+            ],
+            answer: 1,
+            type: "mc",
+            explanation: "Comprar acciones es invertir.",
+          },
+        ],
+      };
+      for (let g = 6; g <= 11; g++) {
+        EXERCISES[g] = {};
+        for (const t of Object.keys(baseQuestions)) {
+          EXERCISES[g][t] = baseQuestions[t].map((q, i) => ({
+            id: `g${g}_${t}_${i + 1}`,
+            ...q,
+            points: 10,
+          }));
+        }
+      }
+
+      // --- Utilidades ---
+      function getInitials(name) {
+        return name
+          .split(" ")
+          .map((w) => w[0])
+          .join("")
+          .toUpperCase()
+          .slice(0, 2);
+      }
+      function getAvatar(user) {
+        if (user.avatar)
+          return `<img src="${user.avatar}" alt="Avatar" class="avatar">`;
+        return `<span class="avatar" aria-label="Avatar">${getInitials(
+          user.name
+        )}</span>`;
+      }
+      function getLeaderboard(users) {
+        return users
+          .filter((u) => u.role === "Estudiante")
+          .sort((a, b) => b.points - a.points || b.solved - a.solved);
+      }
+      function saveSession(data) {
+        localStorage.setItem("fte_session", JSON.stringify(data));
+      }
+      function loadSession() {
+        return JSON.parse(localStorage.getItem("fte_session") || "null");
+      }
+      function saveProgress(data) {
+        localStorage.setItem("fte_progress", JSON.stringify(data));
+      }
+      function loadProgress() {
+        return JSON.parse(localStorage.getItem("fte_progress") || "{}");
+      }
+      function clearSession() {
+        localStorage.removeItem("fte_session");
+      }
+
+      // --- Estado global ---
+      let state = {
+        user: null, // usuario logueado
+        users: [], // todos los usuarios (fake + real)
+        progress: {}, // { [userId]: { points, solved, byGrade: { [grade]: { [topic]: [ids] } } } }
+        view: "login", // login | dashboard | grade | topic | leaderboard | qr | teacher
+        grade: null,
+        topic: null,
+      };
+
+      // --- Inicialización ---
+      function seedUsers() {
+        let session = loadSession();
+        let users = DEMO_USERS.map((u) => ({ ...u }));
+        if (session && session.user) {
+          let idx = users.findIndex((u) => u.id === session.user.id);
+          if (idx >= 0) users[idx] = { ...session.user };
+          else users.unshift({ ...session.user });
+        }
+        return users;
+      }
+      function seedProgress() {
+        let prog = loadProgress();
+        if (!prog || typeof prog !== "object") prog = {};
+        DEMO_USERS.forEach((u) => {
+          if (!prog[u.id])
+            prog[u.id] = { points: u.points, solved: u.solved, byGrade: {} };
+        });
+        return prog;
+      }
+
+      function initApp() {
+        // Si hay sesión, restaurar; si no, autologin como Ingrid Student
+        let session = loadSession();
+        let users = seedUsers();
+        let progress = seedProgress();
+        let user =
+          session && session.user
+            ? session.user
+            : users.find((u) => u.name === "Ingrid Student");
+        if (!session) {
+          // Autologin
+          state = {
+            ...state,
+            user,
+            users,
+            progress,
+            view: user.role === "Docente" ? "teacher" : "dashboard",
+          };
+          saveSession({ user });
+          saveProgress(progress);
+        } else {
+          state = {
+            ...state,
+            user,
+            users,
+            progress,
+            view: user.role === "Docente" ? "teacher" : "dashboard",
+          };
+        }
+        render();
+      }
+
+      // --- Renderizado principal ---
+      function render() {
+        // Navbar
+        const navbar = document.getElementById("navbar");
+        if (state.user) {
+          navbar.classList.remove("d-none");
+          document.getElementById("navbar-username").textContent =
+            state.user.name;
+          document.getElementById("navbar-avatar").innerHTML = getAvatar(
+            state.user
+          );
+        } else {
+          navbar.classList.add("d-none");
+        }
+        // Main
+        const main = document.getElementById("main");
+        main.innerHTML = "";
+        switch (state.view) {
+          case "login":
+            renderLogin(main);
+            break;
+          case "dashboard":
+            renderDashboard(main);
+            break;
+          case "grade":
+            renderGrade(main);
+            break;
+          case "topic":
+            renderTopic(main);
+            break;
+          case "leaderboard":
+            renderLeaderboard(main);
+            break;
+          case "qr":
+            renderQR(main);
+            break;
+          case "teacher":
+            renderTeacher(main);
+            break;
+        }
+      }
+
+      // --- Login ---
+      function renderLogin(main) {
+        main.innerHTML = `
+      <div class="card card-login shadow mx-auto" role="form" aria-label="Formulario de inicio de sesión">
+        <div class="card-body">
+          <div class="text-center mb-3">
+            <img src="logo.png" alt="Logo FinTech Edu" class="brand-logo mb-2" onerror="this.style.display='none'">
+            <h2 class="h5 fw-bold">FinTech Edu</h2>
+          </div>
+          <form id="loginForm" autocomplete="on">
+            <div class="mb-2">
+              <label for="loginUser" class="form-label">Usuario o Correo</label>
+              <input type="text" class="form-control" id="loginUser" required aria-required="true" autocomplete="username">
+            </div>
+            <div class="mb-2">
+              <label for="loginPass" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="loginPass" required aria-required="true" autocomplete="current-password">
+            </div>
+            <div class="mb-3">
+              <label for="loginRole" class="form-label">Perfil</label>
+              <select class="form-select" id="loginRole" required aria-required="true">
+                <option value="Estudiante">Estudiante</option>
+                <option value="Docente">Docente</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+          </form>
+        </div>
+      </div>
+    `;
+        document.getElementById("loginForm").onsubmit = function (e) {
+          e.preventDefault();
+          const userVal = document.getElementById("loginUser").value.trim();
+          const roleVal = document.getElementById("loginRole").value;
+          let user = state.users.find(
+            (u) =>
+              (u.email === userVal ||
+                u.name.toLowerCase() === userVal.toLowerCase()) &&
+              u.role === roleVal
+          );
+          if (!user) {
+            // Crear usuario fake
+            user = {
+              id: "u" + Date.now(),
+              name: userVal,
+              email: userVal,
+              role: roleVal,
+              points: 0,
+              solved: 0,
+              avatar: "",
+              isCurrent: true,
+            };
+            state.users.push(user);
+            state.progress[user.id] = { points: 0, solved: 0, byGrade: {} };
+          }
+          state.user = user;
+          saveSession({ user });
+          saveProgress(state.progress);
+          state.view = roleVal === "Docente" ? "teacher" : "dashboard";
+          render();
+        };
+      }
+
+      // --- Dashboard Estudiante ---
+      function renderDashboard(main) {
+        const prog = state.progress[state.user.id] || {
+          points: 0,
+          solved: 0,
+          byGrade: {},
+        };
+        main.innerHTML = `
+      <div class="row mb-3 align-items-center">
+        <div class="col-auto">
+          ${getAvatar(state.user)}
+        </div>
+        <div class="col">
+          <h3 class="h5 mb-1">Hola, <span class="fw-bold">${
+            state.user.name
+          }</span></h3>
+          <div class="text-muted">Puntaje actual: <span class="fw-bold">${
+            prog.points
+          }</span></div>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-outline-primary btn-sm" id="goLeaderboard"><i class="bi bi-trophy"></i> Leaderboard</button>
+        </div>
+      </div>
+      <div class="mb-4">
+        <h4 class="h6">Selecciona tu grado</h4>
+        <div class="row g-2">
+          ${GRADES.map(
+            (g) => `
+            <div class="col-6 col-md-4 col-lg-2">
+              <div class="card dashboard-card text-center p-3" tabindex="0" role="button" aria-label="Grado ${g}" data-grade="${g}">
+                <div class="display-6 fw-bold">${g}</div>
+                <div class="text-muted">Grado</div>
+              </div>
+            </div>
+          `
+          ).join("")}
+        </div>
+      </div>
+      <div class="mb-4">
+        <h4 class="h6">Tus logros</h4>
+        <div class="row g-2">
+          <div class="col-6 col-md-4">
+            <div class="card p-2 text-center">
+              <div class="fw-bold">${prog.points}</div>
+              <div class="text-muted">Puntos</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div class="card p-2 text-center">
+              <div class="fw-bold">${prog.solved}</div>
+              <div class="text-muted">Ejercicios resueltos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <button class="btn btn-outline-secondary btn-sm" id="goQR"><i class="bi bi-qr-code"></i> Comparte con QR</button>
+      </div>
+    `;
+        main.querySelectorAll(".dashboard-card").forEach((card) => {
+          card.onclick = () => {
+            state.grade = card.dataset.grade;
+            state.view = "grade";
+            render();
+          };
+          card.onkeypress = (e) => {
+            if (e.key === "Enter") {
+              card.onclick();
+            }
+          };
+        });
+        document.getElementById("goLeaderboard").onclick = () => {
+          state.view = "leaderboard";
+          render();
+        };
+        document.getElementById("goQR").onclick = () => {
+          state.view = "qr";
+          render();
+        };
+      }
+
+      // --- Vista de Grado ---
+      function renderGrade(main) {
+        main.innerHTML = `
+      <div class="mb-3">
+        <button class="btn btn-link btn-sm" id="backDashboard"><i class="bi bi-arrow-left"></i> Volver</button>
+        <h4 class="h6 d-inline ms-2">Grado ${state.grade}</h4>
+      </div>
+      <div class="row g-2">
+        ${TOPICS.map(
+          (t) => `
+          <div class="col-6 col-md-3">
+            <div class="card topic-card text-center p-3" tabindex="0" role="button" aria-label="Tema ${t.name}" data-topic="${t.id}">
+              <i class="bi ${t.icon} display-6 mb-2"></i>
+              <div class="fw-bold">${t.name}</div>
+            </div>
+          </div>
+        `
+        ).join("")}
+      </div>
+    `;
+        main.querySelectorAll(".topic-card").forEach((card) => {
+          card.onclick = () => {
+            state.topic = card.dataset.topic;
+            state.view = "topic";
+            render();
+          };
+          card.onkeypress = (e) => {
+            if (e.key === "Enter") {
+              card.onclick();
+            }
+          };
+        });
+        document.getElementById("backDashboard").onclick = () => {
+          state.view = "dashboard";
+          render();
+        };
+      }
+
+      // --- Vista de Tema (Ejercicios) ---
+      function renderTopic(main) {
+        const grade = state.grade;
+        const topic = state.topic;
+        const exercises = (EXERCISES[grade] && EXERCISES[grade][topic]) || [];
+        const prog = state.progress[state.user.id] || { byGrade: {} };
+        const solvedIds =
+          (prog.byGrade[grade] && prog.byGrade[grade][topic]) || [];
+        main.innerHTML = `
+      <div class="mb-3">
+        <button class="btn btn-link btn-sm" id="backGrade"><i class="bi bi-arrow-left"></i> Volver</button>
+        <h4 class="h6 d-inline ms-2">${
+          TOPICS.find((t) => t.id === topic).name
+        } - Grado ${grade}</h4>
+      </div>
+      <div class="list-group">
+        ${exercises
+          .map((ex, i) => {
+            const solved = solvedIds.includes(ex.id);
+            return `<div class="list-group-item mb-2 ${
+              solved ? "bg-success-subtle" : ""
+            }" id="ex-${ex.id}">
+            <div class="fw-semibold">${i + 1}. ${ex.q}</div>
+            ${
+              ex.type === "mc"
+                ? ex.options
+                    .map(
+                      (opt, idx) => `<div class="form-check">
+                <input class="form-check-input" type="radio" name="ex${
+                  ex.id
+                }" id="ex${ex.id}opt${idx}" value="${idx}" ${
+                        solved ? "disabled" : ""
+                      }>
+                <label class="form-check-label" for="ex${
+                  ex.id
+                }opt${idx}">${opt}</label>
+              </div>`
+                    )
+                    .join("")
+                : `<input type="number" class="form-control w-auto d-inline-block" id="ex${
+                    ex.id
+                  }num" style="max-width:120px;" ${solved ? "disabled" : ""}>`
+            }
+            <button class="btn btn-sm btn-primary mt-2" id="validate${ex.id}" ${
+              solved ? "disabled" : ""
+            }>Validar</button>
+            <div class="feedback" id="feedback${ex.id}"></div>
+          </div>`;
+          })
+          .join("")}
+      </div>
+    `;
+        document.getElementById("backGrade").onclick = () => {
+          state.view = "grade";
+          render();
+        };
+        exercises.forEach((ex) => {
+          if (solvedIds.includes(ex.id)) {
+            document.getElementById(
+              `feedback${ex.id}`
+            ).innerHTML = `<span class="text-success"><i class="bi bi-check-circle"></i> ¡Correcto! ${ex.explanation}</span>`;
+          }
+          document.getElementById(`validate${ex.id}`).onclick = () => {
+            let correct = false,
+              val;
+            if (ex.type === "mc") {
+              const sel = document.querySelector(
+                `input[name=ex${ex.id}]:checked`
+              );
+              if (!sel) return;
+              val = parseInt(sel.value);
+              correct = val === ex.answer;
+            } else {
+              val = parseFloat(document.getElementById(`ex${ex.id}num`).value);
+              correct = Math.abs(val - ex.answer) < 0.01;
+            }
+            const feedback = document.getElementById(`feedback${ex.id}`);
+            if (correct) {
+              feedback.innerHTML = `<span class="text-success"><i class="bi bi-check-circle"></i> ¡Correcto! ${ex.explanation}</span>`;
+              // Marcar como resuelto
+              if (!solvedIds.includes(ex.id)) {
+                if (!prog.byGrade[grade]) prog.byGrade[grade] = {};
+                if (!prog.byGrade[grade][topic])
+                  prog.byGrade[grade][topic] = [];
+                prog.byGrade[grade][topic].push(ex.id);
+                prog.points += ex.points;
+                prog.solved += 1;
+                saveProgress(state.progress);
+                // Actualizar usuario en leaderboard
+                let u = state.users.find((u) => u.id === state.user.id);
+                if (u) {
+                  u.points = prog.points;
+                  u.solved = prog.solved;
+                }
+                saveSession({ user: state.user });
+                setTimeout(() => render(), 800);
+              }
+            } else {
+              feedback.innerHTML = `<span class="text-danger"><i class="bi bi-x-circle"></i> Incorrecto. Intenta de nuevo.</span><br><span class="text-muted">${ex.explanation}</span>`;
+            }
+          };
+        });
+      }
+
+      // --- Leaderboard ---
+      function renderLeaderboard(main) {
+        const leaderboard = getLeaderboard(
+          state.users.map((u) => {
+            const prog = state.progress[u.id] || { points: 0, solved: 0 };
+            return { ...u, points: prog.points, solved: prog.solved };
+          })
+        );
+        main.innerHTML = `
+      <div class="mb-3">
+        <button class="btn btn-link btn-sm" id="backDashboard"><i class="bi bi-arrow-left"></i> Volver</button>
+        <h4 class="h6 d-inline ms-2">Leaderboard</h4>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr><th>#</th><th>Avatar</th><th>Nombre</th><th>Puntos</th><th>Ejercicios</th></tr>
+          </thead>
+          <tbody>
+            ${leaderboard
+              .map(
+                (u, i) => `
+              <tr${u.id === state.user.id ? ' class="table-primary"' : ""}>
+                <td>${i + 1}</td>
+                <td><span class="leaderboard-avatar">${getInitials(
+                  u.name
+                )}</span></td>
+                <td>${u.name}</td>
+                <td>${u.points}</td>
+                <td>${u.solved}</td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+        document.getElementById("backDashboard").onclick = () => {
+          state.view = "dashboard";
+          render();
+        };
+      }
+
+      // --- QR Section ---
+      function renderQR(main) {
+        main.innerHTML = `
+      <div class="mb-3">
+        <button class="btn btn-link btn-sm" id="backDashboard"><i class="bi bi-arrow-left"></i> Volver</button>
+        <h4 class="h6 d-inline ms-2">Comparte con QR</h4>
+      </div>
+      <div class="qr-section">
+        <div id="qrcode"></div>
+        <button class="btn btn-primary mt-2" id="downloadQR"><i class="bi bi-download"></i> Descargar PNG</button>
+      </div>
+    `;
+        // Generar QR
+        setTimeout(() => {
+          document.getElementById("qrcode").innerHTML = "";
+          const qr = new QRCode(document.getElementById("qrcode"), {
+            text: window.location.href,
+            width: 180,
+            height: 180,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H,
+          });
+        }, 100);
+        document.getElementById("downloadQR").onclick = function () {
+          const img =
+            document.querySelector("#qrcode img") ||
+            document.querySelector("#qrcode canvas");
+          let url = img.src || img.toDataURL();
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "fintech-edu-qr.png";
+          a.click();
+        };
+        document.getElementById("backDashboard").onclick = () => {
+          state.view = "dashboard";
+          render();
+        };
+      }
+
+      // --- Vista Docente ---
+      function renderTeacher(main) {
+        // Ranking y progreso agregado por tema/grado
+        const leaderboard = getLeaderboard(
+          state.users.map((u) => {
+            const prog = state.progress[u.id] || { points: 0, solved: 0 };
+            return { ...u, points: prog.points, solved: prog.solved };
+          })
+        );
+        // Progreso por grado/tema
+        let stats = {};
+        GRADES.forEach((g) => {
+          stats[g] = {};
+          TOPICS.forEach((t) => {
+            let total = 0;
+            Object.values(state.progress).forEach((p) => {
+              if (p.byGrade[g] && p.byGrade[g][t.id])
+                total += p.byGrade[g][t.id].length;
+            });
+            stats[g][t.id] = total;
+          });
+        });
+        main.innerHTML = `
+      <div class="mb-3">
+        <button class="btn btn-link btn-sm" id="logoutTeacher"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</button>
+        <h4 class="h6 d-inline ms-2">Vista Docente</h4>
+      </div>
+      <div class="mb-4">
+        <h5 class="h6">Leaderboard</h5>
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr><th>#</th><th>Avatar</th><th>Nombre</th><th>Puntos</th><th>Ejercicios</th></tr>
+            </thead>
+            <tbody>
+              ${leaderboard
+                .map(
+                  (u, i) => `
+                <tr${u.role === "Docente" ? ' class="table-secondary"' : ""}>
+                  <td>${i + 1}</td>
+                  <td><span class="leaderboard-avatar">${getInitials(
+                    u.name
+                  )}</span></td>
+                  <td>${u.name}</td>
+                  <td>${u.points}</td>
+                  <td>${u.solved}</td>
+                </tr>
+              `
+                )
+                .join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="mb-4">
+        <h5 class="h6">Progreso por grado y tema</h5>
+        <div class="row g-2">
+          ${GRADES.map(
+            (g) => `
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card p-2 mb-2">
+                <div class="fw-bold mb-1">Grado ${g}</div>
+                ${TOPICS.map((t) => {
+                  const total = stats[g][t.id];
+                  const max =
+                    EXERCISES[g] && EXERCISES[g][t.id]
+                      ? EXERCISES[g][t.id].length * leaderboard.length
+                      : 1;
+                  const percent = Math.round((100 * total) / max);
+                  return `<div class="mb-1">
+                    <span class="me-1">${t.name}</span>
+                    <div class="stat-bar"><div class="stat-bar-inner" style="width:${percent}%;"></div></div>
+                    <span class="text-muted small">${total} resueltos</span>
+                  </div>`;
+                }).join("")}
+              </div>
+            </div>
+          `
+          ).join("")}
+        </div>
+      </div>
+    `;
+        document.getElementById("logoutTeacher").onclick = () => {
+          clearSession();
+          location.reload();
+        };
+      }
+
+      // --- Navbar logout ---
+      document.getElementById("logoutBtn").onclick = function () {
+        clearSession();
+        location.reload();
+      };
+
+      // --- Iniciar app ---
+      window.onload = initApp;
+    </script>
+  </body>
+</html>
