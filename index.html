@@ -667,8 +667,14 @@
           </div>
         </div>
       </div>
-      <div class="mb-4">
+      <div class="mb-4 position-relative">
         <button class="btn btn-outline-secondary btn-sm" id="goQR"><i class="bi bi-qr-code"></i> Comparte con QR</button>
+        <div id="qrPopover" class="position-absolute bg-white border rounded shadow p-3" style="display:none;z-index:100;top:45px;left:0;min-width:220px;">
+          <div class="text-center mb-2 fw-bold">Escanea este QR</div>
+          <div id="dashboardQR"></div>
+          <button class="btn btn-primary btn-sm mt-2 w-100" id="downloadDashboardQR"><i class="bi bi-download"></i> Descargar PNG</button>
+          <button class="btn btn-link btn-sm w-100 mt-1" id="closeQRPopover">Cerrar</button>
+        </div>
       </div>
     `;
         main.querySelectorAll(".dashboard-card").forEach((card) => {
@@ -687,9 +693,37 @@
           state.view = "leaderboard";
           render();
         };
-        document.getElementById("goQR").onclick = () => {
-          state.view = "qr";
-          render();
+        const qrPopover = document.getElementById("qrPopover");
+        document.getElementById("goQR").onclick = (e) => {
+          e.preventDefault();
+          qrPopover.style.display =
+            qrPopover.style.display === "block" ? "none" : "block";
+          if (qrPopover.style.display === "block") {
+            document.getElementById("dashboardQR").innerHTML = "";
+            setTimeout(() => {
+              new QRCode(document.getElementById("dashboardQR"), {
+                text: window.location.href,
+                width: 180,
+                height: 180,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H,
+              });
+            }, 50);
+          }
+        };
+        document.getElementById("closeQRPopover").onclick = () => {
+          qrPopover.style.display = "none";
+        };
+        document.getElementById("downloadDashboardQR").onclick = function () {
+          const img =
+            document.querySelector("#dashboardQR img") ||
+            document.querySelector("#dashboardQR canvas");
+          let url = img.src || img.toDataURL();
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "fintech-edu-qr.png";
+          a.click();
         };
       }
 
